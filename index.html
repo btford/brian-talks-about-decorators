@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Decorators</title>
+</head>
+<body ng-app>
+
+  {{foo}}
+
+  <script src="/bower_components/angular/angular.js"></script>
+  <script>
+    angular.module('ng')
+      .config(function ($provide) {
+        // here $delegate == $rootScope
+        $provide.decorator('$rootScope', function ($delegate) {
+          // do whatever you you want
+          $delegate.$apply = timerify($delegate.$apply, '$apply');
+          return $delegate;
+        });
+      });
+
+      function timerify (fn, name) {
+        return function () {
+          var start = Date.now();
+          var ret = fn.apply(this, arguments);
+          var end = Date.now();
+          console.log(name + ': ' + (end - start));
+        }
+      }
+  </script>
+</body>
+</html>
