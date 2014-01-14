@@ -14,12 +14,15 @@
       .config(function ($provide) {
         // here $delegate == $rootScope
         $provide.decorator('$rootScope', function ($delegate) {
-          // do whatever you you want
+
+          // let's augment $rootScope.$apply to print the run time
           $delegate.$apply = timerify($delegate.$apply, '$apply');
           return $delegate;
         });
       });
 
+      // takes a function, returns a function that
+      // runs the first function and logs the runtime
       function timerify (fn, name) {
         return function () {
           var start = Date.now();
